@@ -1,8 +1,8 @@
-# Vibe Companion
+# context.fm
 
 A background music companion that follows your work in Codex, drawing from music you already know and enjoy.
 
-**Status: concept and implementation plan. No working application yet.** Spotify is the proposed first integration; Apple Music is a later investigation. The name is provisional.
+**Status: concept and implementation plan. No working application yet.** Spotify is the proposed first integration; Apple Music is a later investigation.
 
 ## The experience
 
