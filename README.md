@@ -1,20 +1,47 @@
 # context.fm
 
-A background music companion that follows your work in Codex, drawing from music you already know and enjoy.
+**Your session sets the soundtrack.**
+
+Context.fm is a background music companion that quietly scores your work in Codex using music you already know and enjoy. It does not wait for a music command. The session itself is the input.
 
 **Status: concept and implementation plan. No working application yet.** Spotify is the proposed first integration; Apple Music is a later investigation.
 
 ## The experience
 
-Connect your music account and enable the companion once. Continue using Codex normally. As your conversation moves between exploration, creative work, and focused problem solving, upcoming music gradually shifts with it. No music commands, mood questionnaires, or confirmation prompts during normal listening.
+Connect your music account and enable the companion once. Then continue using Codex normally: describe an idea, wrestle with a failing test, refine a design, or celebrate a fix. Context.fm uses a short rolling window of submitted prompts to estimate the shape and intensity of the work, then gradually adjusts upcoming music within your taste.
+
+You never need to say “play music,” choose a mood, or manage a set of preset playlists. Context.fm stays in the background and lets the soundtrack emerge from the session. Ordinary operation has no music commands, mood questionnaires, chat announcements, or per-track confirmation prompts.
 
 Ambient describes the behavior of the companion, not a required music genre. The soundtrack should sound like you.
+
+For example:
+
+- Open-ended brainstorming may lean toward familiar music that has accompanied energetic, exploratory sessions before.
+- Sustained debugging may gradually favor less distracting tracks without reacting to every failed command.
+- A resolved problem may lift the direction of the next track without interrupting the current one.
+- Terse or frustrated-looking prompts are contextual clues, not proof of an emotion. Context.fm adapts conservatively and never claims to know how the listener feels.
+
+## What it learns
+
+The initial taste model comes from authorized listening evidence such as recent plays, top tracks and artists, and accessible library or playlist data. Over time, Context.fm can learn which parts of that taste fit different kinds of sessions.
+
+Learning should be quiet and contextual:
+
+- Listening through a companion-selected track is a weak positive signal.
+- Replaying or saving it is a stronger positive signal.
+- Skipping quickly is a negative-but-ambiguous signal, not a definitive dislike.
+- Manually choosing different music tells Context.fm to yield immediately and may inform later sessions only when the surrounding context is comparable.
+- Repeated outcomes matter more than a single action. Recent evidence should outweigh stale evidence.
+
+The result is personal rather than universal: “intense debugging music” should mean whatever has actually worked for this listener. Context.fm must distinguish its own selections from independent listening so it does not train on its output as if it were new evidence of taste.
 
 ## Product principles
 
 - Familiarity first: prioritize tracks you have played and artists you already enjoy, with recent listening weighted strongly.
+- The session is the control surface: normal Codex prompts provide context; music commands are not required for the core experience.
 - Context is a clue: use several submitted prompts to estimate the work context. Do not claim to know the listener's emotions.
 - Continuity matters: let tracks finish and adjust upcoming selections gradually. A single message should not abruptly change the soundtrack.
+- Learn conservatively: adapt from repeated, context-linked playback outcomes rather than treating every skip or listen as a verdict.
 - Stay quiet: ordinary operation needs no notifications or approval clicks after initial setup.
 - Respect direct control: a manual pause stays paused; choosing an album or playlist makes the companion yield.
 - Preserve momentum: uncertain context or an unavailable service should leave current playback alone.
@@ -28,7 +55,8 @@ Example: familiar upbeat songs accompany brainstorming. As the conversation sett
 3. Maintain a small, short-lived estimate of the current work context.
 4. Rank familiar candidates for contextual fit and continuity, with repetition limits and conservative switching.
 5. Schedule playback changes around track boundaries on one explicitly selected device.
-6. Provide a simple enable/pause control and an optional local explanation view for debugging.
+6. Observe bounded playback outcomes and update a local context-to-music preference memory without over-interpreting individual actions.
+7. Provide a simple enable/pause control and an optional local explanation view for debugging.
 
 There is no requirement to pick five preset playlists or tell the companion when to shift. Manual music commands through MCP may be useful later, but the background experience must work without them.
 
