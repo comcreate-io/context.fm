@@ -19,14 +19,14 @@ import (
 // hookInput mirrors the documented UserPromptSubmit fields we care about.
 // Unknown fields are ignored for forward compatibility.
 type hookInput struct {
-	SessionID   string `json:"session_id"`
-	Transcript  string `json:"transcript_path"`
-	CWD         string `json:"cwd"`
-	HookEvent   string `json:"hook_event_name"`
-	Model       string `json:"model"`
-	TurnID      string `json:"turn_id"`
-	Prompt      string `json:"prompt"`
-	PermMode    string `json:"permission_mode"`
+	SessionID  string `json:"session_id"`
+	Transcript string `json:"transcript_path"`
+	CWD        string `json:"cwd"`
+	HookEvent  string `json:"hook_event_name"`
+	Model      string `json:"model"`
+	TurnID     string `json:"turn_id"`
+	Prompt     string `json:"prompt"`
+	PermMode   string `json:"permission_mode"`
 }
 
 func main() {

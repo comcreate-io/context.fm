@@ -6,6 +6,7 @@ import (
 	"os"
 	"time"
 
+	"github.com/comcreate-io/context.fm/internal/config"
 	workctx "github.com/comcreate-io/context.fm/internal/context"
 	"github.com/comcreate-io/context.fm/internal/memory"
 	"github.com/comcreate-io/context.fm/internal/observe"
@@ -22,6 +23,13 @@ func runDaemon(deviceID string, interval time.Duration) error {
 		return err
 	}
 	defer lock.Release()
+
+	// Device resolves from the flag or the TUI-written setup config.
+	if deviceID == "" {
+		if cfg, err := config.Load(); err == nil {
+			deviceID = cfg.DeviceID
+		}
+	}
 
 	store, err := memory.Open()
 	if err != nil {
@@ -65,8 +73,8 @@ func tick(deviceID string, store *memory.Store, obs *observe.Observer, lastQueue
 	}
 	obs.SetLabel(string(snap.Label), sess)
 
-	// Observe-only unless the gate, device, and auth all check out.
-	if !spotify.GateEnabled() || deviceID == "" {
+	// Observe-only unless the gate, setup switch, device, and auth all check out.
+	if !spotify.GateEnabled() || deviceID == "" || !setupEnabled() {
 		return observeOnce(ctx, deviceID, store, obs, now)
 	}
 	client, err := spotify.EnsureValidToken(ctx, "", spotify.ClientID())
@@ -124,6 +132,13 @@ func observeOnce(ctx context.Context, deviceID string, store *memory.Store, obs 
 		fmt.Printf("observed %s outcome=%s by=%s\n", rec.TrackID, rec.Outcome, rec.ChosenBy)
 	}
 	return nil
+}
+
+// setupEnabled reads the TUI setup switch. Any load failure means disabled:
+// the daemon never drives playback on uncertain setup.
+func setupEnabled() bool {
+	cfg, err := config.Load()
+	return err == nil && cfg.Enabled && cfg.DeviceID != ""
 }
 
 // familiarPool builds candidates from live top/recent listening evidence.
