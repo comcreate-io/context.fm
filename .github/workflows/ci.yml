@@ -1,0 +1,45 @@
+name: ci
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  go:
+    runs-on: blacksmith-4vcpu-ubuntu-2404
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-go@v5
+        with:
+          go-version: "1.25"
+          cache: false
+      - run: go build ./...
+      - run: go vet ./...
+      - run: go test ./...
+
+  # OCR review runs only when an LLM key is configured; non-blocking until then.
+  ocr:
+    needs: go
+    runs-on: blacksmith-4vcpu-ubuntu-2404
+    continue-on-error: true
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "24"
+      - run: npm install -g @alibaba-group/open-code-review
+      - run: |
+          if [ -z "${{ secrets.OCR_API_KEY }}" ]; then
+            echo "OCR_API_KEY not set; skipping managed review."
+            exit 0
+          fi
+          ocr review --from origin/main --to HEAD --format json --output /tmp/ocr-result.json
+        env:
+          OCR_API_KEY: ${{ secrets.OCR_API_KEY }}
