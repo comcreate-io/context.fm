@@ -20,6 +20,8 @@ func main() {
 	once := flag.Bool("once", false, "drain status once and exit")
 	interval := flag.Duration("interval", 2*time.Second, "poll interval in daemon mode")
 	explain := flag.Bool("explain", false, "print context + ranking explanation and exit")
+	daemon := flag.Bool("daemon", false, "run the autonomous pilot loop (single-owner, gated)")
+	device := flag.String("device", "", "Spotify device ID for --daemon selection/observation")
 	candsPath := flag.String("candidates", "fixtures/spotify/candidates.json", "candidate pool JSON for --explain")
 	outcomesPath := flag.String("outcomes", "", "playback outcome JSON for --explain affinity (optional)")
 	current := flag.String("current", "", "current track ID for --explain shift verdict")
@@ -28,6 +30,8 @@ func main() {
 
 	var err error
 	switch {
+	case *daemon:
+		err = runDaemon(*device, *interval)
 	case *explain:
 		err = runExplain(*candsPath, *outcomesPath, *current, *sinceShift)
 	case *once:
