@@ -1,0 +1,7 @@
+[
+  {"track_id": "trk_morning", "title": "Synthetic Morning", "artist": "Fixture Band", "familiarity": 0.9, "play_count_7d": 1},
+  {"track_id": "trk_focus", "title": "Synthetic Focus", "artist": "Fixture Ensemble", "familiarity": 0.8, "play_count_7d": 2},
+  {"track_id": "trk_deep", "title": "Synthetic Deep Cut", "artist": "Fixture Band", "familiarity": 0.6, "play_count_7d": 0},
+  {"track_id": "trk_overplayed", "title": "Synthetic Overplayed", "artist": "Fixture Radio", "familiarity": 0.85, "play_count_7d": 14},
+  {"track_id": "trk_rare", "title": "Synthetic Rare", "artist": "Fixture Archive", "familiarity": 0.3, "play_count_7d": 0}
+]

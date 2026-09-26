@@ -1,0 +1,6 @@
+[
+  {"track_id": "trk_morning", "context_label": "debug", "outcome": "completed", "chosen_by": "companion", "session_id": "ses_synth_1"},
+  {"track_id": "trk_morning", "context_label": "debug", "outcome": "completed", "chosen_by": "companion", "session_id": "ses_synth_2"},
+  {"track_id": "trk_focus", "context_label": "debug", "outcome": "quick_skip", "chosen_by": "companion", "session_id": "ses_synth_1"},
+  {"track_id": "trk_focus", "context_label": "explore", "outcome": "replay", "chosen_by": "companion", "session_id": "ses_synth_3"}
+]
