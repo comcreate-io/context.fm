@@ -17,3 +17,4 @@ __pycache__/
 .direnv/
 result
 .DS_Store
+bin/
