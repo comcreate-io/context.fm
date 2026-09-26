@@ -15,6 +15,7 @@ import (
 	"encoding/base64"
 	"encoding/json"
 	"fmt"
+	"io"
 	"net/http"
 	"net/url"
 	"strings"
@@ -249,15 +250,16 @@ func tokenForm(ctx context.Context, tokenURL string, form url.Values) (Token, er
 		return Token{}, err
 	}
 	defer resp.Body.Close()
+	body, _ := io.ReadAll(io.LimitReader(resp.Body, 4*1024))
 	if resp.StatusCode != http.StatusOK {
-		return Token{}, fmt.Errorf("spotify: token exchange: status %d", resp.StatusCode)
+		return Token{}, fmt.Errorf("spotify: token exchange: status %d: %s", resp.StatusCode, strings.TrimSpace(string(body)))
 	}
 	var raw struct {
 		AccessToken  string `json:"access_token"`
 		RefreshToken string `json:"refresh_token"`
 		ExpiresIn    int    `json:"expires_in"`
 	}
-	if err := json.NewDecoder(resp.Body).Decode(&raw); err != nil {
+	if err := json.Unmarshal(body, &raw); err != nil {
 		return Token{}, err
 	}
 	if raw.AccessToken == "" {
