@@ -147,6 +147,14 @@ func runExplain(candsPath, outcomesPath, currentID string, sinceShift time.Durat
 				affin[c.TrackID] = a
 			}
 		}
+	} else if store, err := memory.Open(); err == nil {
+		// Learned state when present; a fresh machine simply has none.
+		for _, c := range cands {
+			if a, err := store.LearnedAffinity(c.TrackID, string(snap.Label), now); err == nil && a != 0 {
+				affin[c.TrackID] = a
+			}
+		}
+		_ = store.Close()
 	}
 
 	ranked := policy.Rank(cands, affin, now)
