@@ -1,0 +1,10 @@
+{
+  "session_id": "ses_synth_1",
+  "transcript_path": null,
+  "cwd": "/repo",
+  "hook_event_name": "UserPromptSubmit",
+  "model": "gpt-6-astra",
+  "turn_id": "turn_brainstorm_1",
+  "permission_mode": "default",
+  "prompt": "Let's brainstorm three approaches for the onboarding flow before I touch any code."
+}
